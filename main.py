@@ -1,3 +1,7 @@
+"""
+Main program.
+"""
+
 import random
 
 import algorithms
@@ -7,11 +11,14 @@ def main() -> None:
     Main function.
     """
 
-    print("========================== SortAnalyzer ==========================")
+    print("=" * 26 + " SortAnalyzer " + "=" * 26)
 
     print("We are going to generate a list to you!\n")
 
-    list_type = input("(1) RANDOM LIST | (2) SORTED LIST | (3) SORTED LIST (reverse order)\nSelect the type of the list: ")
+    list_type = input("(1) RANDOM LIST | (2) SORTED LIST | "
+        "(3) SORTED LIST (reverse order)\n"
+        "Select the type of the list: ")
+
     if list_type not in ("1", "2", "3"):
         print("Invalid option!")
         return
