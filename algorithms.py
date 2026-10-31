@@ -1,3 +1,7 @@
+"""
+Implementation of sorting algorithms.
+"""
+
 from typing import Any, Callable
 import random
 import time
@@ -11,23 +15,22 @@ def clock(func: Callable[..., Any]) -> Callable[..., None]:
     """
 
     def wrapper(*args: Any, **kwargs: Any) -> None:
-         start_time = time.perf_counter()
+        start_time = time.perf_counter()
 
-         func(*args, **kwargs)
+        func(*args, **kwargs)
 
-         end_time = time.perf_counter()
+        end_time = time.perf_counter()
 
-         total_time = 1000*(end_time - start_time)  # Time in milliseconds.
+        total_time = 1000*(end_time - start_time)  # Time in milliseconds.
 
-         if total_time < 1000:
-             print(f"[Time taken: {(total_time):.2f}ms]")
-         elif total_time < 60000:
-             print(f"[Time taken: {(total_time/1000):.2f}s]")
-         elif total_time < 3.6e+6:
-             print(f"[Time taken: {(total_time/60000):.2f}min]")
-         else:
-             print(f"[Time taken: {(total_time/3.6e+6):.2f}h]")
-
+        if total_time < 1000:
+            print(f"[Time taken: {(total_time):.2f}ms]")
+        elif total_time < 60000:
+            print(f"[Time taken: {(total_time/1000):.2f}s]")
+        elif total_time < 3.6e+6:
+            print(f"[Time taken: {(total_time/60000):.2f}min]")
+        else:
+            print(f"[Time taken: {(total_time/3.6e+6):.2f}h]")
 
     return wrapper
 
@@ -118,28 +121,27 @@ def quick_sort(_list: list[int]) -> None:
 
         if not _list:
             return []
-        elif len(_list) <= 1:
+        if len(_list) <= 1:
             return _list
-        else:
-            pivot_id = random.randint(0, len(_list)-1)
-            pivot = _list[pivot_id]
 
-            lesser_pivot = []
-            equal_pivot = []
-            greater_pivot = []
+        pivot_id = random.randint(0, len(_list)-1)
+        pivot = _list[pivot_id]
 
-            for i in _list:
-                if i < pivot:
-                    lesser_pivot.append(i)
-                elif i == pivot:
-                    equal_pivot.append(i)
-                else:
-                    greater_pivot.append(i)
+        lesser_pivot = []
+        equal_pivot = []
+        greater_pivot = []
 
+        for i in _list:
+            if i < pivot:
+                lesser_pivot.append(i)
+            elif i == pivot:
+                equal_pivot.append(i)
+            else:
+                greater_pivot.append(i)
 
-            new_list = _quick_sort(lesser_pivot) + equal_pivot + _quick_sort(greater_pivot)
+        new_list = _quick_sort(lesser_pivot) + equal_pivot + _quick_sort(greater_pivot)
 
-            return new_list
+        return new_list
 
     _list[:] = _quick_sort(_list)
 
@@ -193,16 +195,15 @@ def merge_sort(_list: list[int]) -> None:
             the passed list sorted.
         """
 
-        if _list:
-            if not _list or len(_list) <= 1:
-                return _list
-            else:
-                _list_half1 = _list[:len(_list)//2]
-                _list_half2 = _list[len(_list)//2:]
+        if len(_list) <= 1:
+            return _list
 
-                _list_sorted_half1 = _merge_sort(_list_half1)
-                _list_sorted_half2 = _merge_sort(_list_half2)
+        _list_half1 = _list[:len(_list)//2]
+        _list_half2 = _list[len(_list)//2:]
 
-                return merge(_list_sorted_half1, _list_sorted_half2)
+        _list_sorted_half1 = _merge_sort(_list_half1)
+        _list_sorted_half2 = _merge_sort(_list_half2)
+
+        return merge(_list_sorted_half1, _list_sorted_half2)
 
     _list[:] = _merge_sort(_list)
