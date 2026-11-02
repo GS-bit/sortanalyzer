@@ -3,98 +3,130 @@ Main program.
 """
 
 import random
+import re
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import IntPrompt, Confirm
+from rich.pretty import pretty_repr
+from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
+from rich.table import Table
+import questionary
 
 import algorithms
-
-from utils import get_compact_list, get_key, input_option, input_positive_integer
 
 def main() -> None:
     """
     Main function.
     """
 
-    print("=" * 26 + " SortAnalyzer " + "=" * 26)
+    console = Console()
 
-    print("We are going to generate a list to you!\n")
+    console.print(Panel("A software tool to analyze performance of sorting algorithms.\n\n"
+                        "We are going to generate a list to you! "
+                        "After its creation, the list will be sorted through some "
+                        "sorting algorithms, and the time taken by each of them will "
+                        "be shown.",
+                        title="[blue bold]SortAnalyzer[/blue bold]",
+                        border_style="blue"))
 
-    list_type = input_option("(1) RANDOM LIST | (2) SORTED LIST | "
-        "(3) SORTED LIST (reverse order)\n"
-        "Select the type of the list: ", ["1", "2", "3"])
+    console.print()
 
-    list_size = input_positive_integer("Type the list size: ")
+    list_type = questionary.select("What kind of list to generate:",
+                                   ["RANDOM LIST", "SORTED LIST (normal order)",
+                                    "SORTED LIST (reverse order)"],
+                                    pointer="❯").ask()
+
+    if list_type is None:
+        return
+
+    list_size = IntPrompt.ask("Type the list size")
 
     _generated_list = []
 
     match list_type:
-        case "1":
+        case "RANDOM LIST":
             _generated_list = [random.randint(1,100*list_size) for i in range(list_size)]
-        case "2":
+        case "SORTED LIST (normal order)":
             _generated_list = list(range(1,list_size+1))
-        case "3":
+        case "SORTED LIST (reverse order)":
             _generated_list = list(range(list_size,0,-1))
         case _:
-            print("Invalid option!")
+            console.print("Invalid option!")
             return
 
-    print("\nList generated successfully!")
+    console.print("\n[green bold]List generated successfully![/green bold]")
 
-    show_generated_list = input_option("Show the generated list? [y/n] ", ["y", "Y", "n"])
-    if show_generated_list in ("y", "Y"):
-        if len(_generated_list) > 20:
-            print(f"Generated list: {_generated_list[:10]} ... {_generated_list[-10:]}")
-        else:
-            print(f"Generated list: {_generated_list}")
+    show_generated_list = Confirm.ask("Show the generated list?")
+    if show_generated_list:
+        formatted_list = re.sub(
+            r"\.\.\. \+\d+", "...", pretty_repr(_generated_list, max_length=10)
+        )
+        console.print(f"Generated list: {formatted_list}")
 
-    show_sorted_list = input_option("\nShow the resulting list for each algorithm? [y/n] ",
-                                    ["y", "Y", "n"])
+    show_sorted_list = Confirm.ask("Show the resulting list for each algorithm?")
 
-    get_key("Type anything to continue...")
+    questionary.press_any_key_to_continue(
+        message="<Press ENTER to continue...>"
+    ).ask()
 
-    print("")
+    console.print("")
 
     _list_to_work = _generated_list[:]  # A copy of the generated list.
 
-    print("\nRunning bubble sort...")
-    algorithms.bubble_sort(_list_to_work)
+    # Setting analysis:
 
-    if show_sorted_list in ("y", "Y"):
-        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+    algorithms_names = ["Bubble sort", "Selection sort", "Insertion sort", "Quick sort",
+                       "Merge sort"]
+    algorithms_funcs = [algorithms.bubble_sort, algorithms.selection_sort,
+                        algorithms.insertion_sort, algorithms.quick_sort,
+                        algorithms.merge_sort]
+    algorithms_times = []
+    algorithms_resulting_lists = []  # Using string compact format,
+                                     # so it does not occupy too much memory.
 
+    console.print("Running algorithms...")
 
-    _list_to_work = _generated_list[:]  # Resetting the list to work to its previous state.
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("[cyan]Starting analysis...", total=len(algorithms_funcs))
 
-    print("\nRunning selection sort...")
-    algorithms.selection_sort(_list_to_work)
+        for name, func in zip(algorithms_names, algorithms_funcs):
+            progress.update(task, description=f"[cyan]Running {name}...")
 
-    if show_sorted_list in ("y", "Y"):
-        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+            algorithms_times.append(func(_list_to_work))
 
+            algorithms_resulting_lists.append(re.sub(r"\.\.\. \+\d+", "...",
+                                            pretty_repr(_list_to_work, max_length=10)))
 
-    _list_to_work = _generated_list[:]
+            _list_to_work = _generated_list[:]  # Resetting the list to work to its previous state.
 
-    print("\nRunning insertion sort...")
-    algorithms.insertion_sort(_list_to_work)
+            progress.update(task, advance=1)
 
-    if show_sorted_list in ("y", "Y"):
-        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+        progress.update(task, description="[bold green]Analysis complete![/bold green]")
 
+    console.print()
 
-    _list_to_work = _generated_list[:]
+    table = Table(title="Analysis results")
 
-    print("\nRunning quick sort...")
-    algorithms.quick_sort(_list_to_work)
+    table.add_column("Algorithm", style="cyan", no_wrap=True)
+    table.add_column("Time taken", style="magenta")
 
-    if show_sorted_list in ("y", "Y"):
-        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+    if show_sorted_list:
+        table.add_column("Resulting list", style="blue")
 
+        for name, time, sorted_list in zip(algorithms_names, 
+                                           algorithms_times, algorithms_resulting_lists):
+            table.add_row(name, time, sorted_list)
+    else:
+        for name, time in zip(algorithms_names, algorithms_times):
+            table.add_row(name, time)
 
-    _list_to_work = _generated_list[:]
-
-    print("\nRunning merge sort...")
-    algorithms.merge_sort(_list_to_work)
-
-    if show_sorted_list in ("y", "Y"):
-        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+    console.print(table)
 
 if __name__ == "__main__":
     main()

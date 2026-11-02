@@ -8,7 +8,7 @@ import time
 
 def clock(func: Callable[..., Any]) -> Callable[..., None]:
     """
-    It runs a sort algorithm with a clock.
+    It puts a clock on a sorting algorithm.
 
     Arguments:
         func: a function that runs the sort algorithm.
@@ -24,23 +24,25 @@ def clock(func: Callable[..., Any]) -> Callable[..., None]:
         total_time = 1000*(end_time - start_time)  # Time in milliseconds.
 
         if total_time < 1000:
-            print(f"[Time taken: {(total_time):.2f}ms]")
-        elif total_time < 60000:
-            print(f"[Time taken: {(total_time/1000):.2f}s]")
-        elif total_time < 3.6e+6:
-            print(f"[Time taken: {(total_time/60000):.2f}min]")
-        else:
-            print(f"[Time taken: {(total_time/3.6e+6):.2f}h]")
+            return f"{(total_time):.2f}ms"
+        if total_time < 60000:
+            return f"{(total_time/1000):.2f}s"
+        if total_time < 3.6e+6:
+            return f"{(total_time/60000):.2f}min"
+        return f"{(total_time/3.6e+6):.2f}h"
 
     return wrapper
 
 @clock
-def bubble_sort(_list: list[int]) -> None:
+def bubble_sort(_list: list[int]) -> str:
     """
     It runs bubble sort on an existing list in-place.
 
     Arguments:
         _list: the list.
+
+    Return:
+        the time taken to run bubble sort.
     """
 
     list_size = len(_list)
@@ -58,12 +60,15 @@ def bubble_sort(_list: list[int]) -> None:
             return
 
 @clock
-def selection_sort(_list: list[int]) -> None:
+def selection_sort(_list: list[int]) -> str:
     """
     It runs selection sort on an existing list in-place.
 
     Arguments:
         _list: the list.
+
+    Return:
+        the time taken to run selection sort.
     """
 
     list_size = len(_list)
@@ -80,12 +85,15 @@ def selection_sort(_list: list[int]) -> None:
         _list[i], _list[minor_pos] = _list[minor_pos], _list[i]
 
 @clock
-def insertion_sort(_list: list[int]) -> None:
+def insertion_sort(_list: list[int]) -> str:
     """
     It runs insertion sort on an existing list in-place.
 
     Arguments:
         _list: the list.
+
+    Return:
+        the time taken to run insertion sort.
     """
 
     list_size = len(_list)
@@ -100,12 +108,15 @@ def insertion_sort(_list: list[int]) -> None:
         _list[j] = cur_number
 
 @clock
-def quick_sort(_list: list[int]) -> None:
+def quick_sort(_list: list[int]) -> str:
     """
     It runs quick sort on an existing list in-place.
 
     Arguments:
         _list: the list.
+
+    Return:
+        the time taken to run quick sort.
     """
 
     def _quick_sort(_list: list[int]) -> list[int]:
@@ -146,12 +157,15 @@ def quick_sort(_list: list[int]) -> None:
     _list[:] = _quick_sort(_list)
 
 @clock
-def merge_sort(_list: list[int]) -> None:
+def merge_sort(_list: list[int]) -> str:
     """
     It runs merge sort on an existing list in-place.
 
     Arguments:
         _list: the list.
+
+    Return:
+        the time taken to run merge sort.
     """
 
     def merge(_list1: list[int], _list2: list[int]) -> list[int]:
