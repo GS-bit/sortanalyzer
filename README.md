@@ -16,7 +16,7 @@ After running SortAnalyser, the program will create a random list of numbers to 
 
 This is a screenshot of the program, used as example of usage:
 
-<img width="678" height="419" alt="Captura_de_tela_20261031_182455" src="https://github.com/user-attachments/assets/f82648a8-3457-41fb-a6e5-c3047abccdd5" />
+<img width="1813" height="812" alt="Captura_de_tela_20261102_160823" src="https://github.com/user-attachments/assets/f16b34d7-ecba-448b-bf3d-44dade3b5f06" />
 
 ## ⬇️ How to install SortAnalyzer:
 
