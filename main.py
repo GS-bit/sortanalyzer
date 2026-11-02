@@ -6,7 +6,7 @@ import random
 
 import algorithms
 
-from utils import input_option, input_positive_integer
+from utils import get_compact_list, get_key, input_option, input_positive_integer
 
 def main() -> None:
     """
@@ -36,28 +36,65 @@ def main() -> None:
             print("Invalid option!")
             return
 
-    print("List generated successfully!")
+    print("\nList generated successfully!")
+
+    show_generated_list = input_option("Show the generated list? [y/n] ", ["y", "Y", "n"])
+    if show_generated_list in ("y", "Y"):
+        if len(_generated_list) > 20:
+            print(f"Generated list: {_generated_list[:10]} ... {_generated_list[-10:]}")
+        else:
+            print(f"Generated list: {_generated_list}")
+
+    show_sorted_list = input_option("\nShow the resulting list for each algorithm? [y/n] ",
+                                    ["y", "Y", "n"])
+
+    get_key("Type anything to continue...")
+
+    print("")
 
     _list_to_work = _generated_list[:]  # A copy of the generated list.
 
     print("\nRunning bubble sort...")
     algorithms.bubble_sort(_list_to_work)
+
+    if show_sorted_list in ("y", "Y"):
+        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+
+
     _list_to_work = _generated_list[:]  # Resetting the list to work to its previous state.
 
     print("\nRunning selection sort...")
     algorithms.selection_sort(_list_to_work)
+
+    if show_sorted_list in ("y", "Y"):
+        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+
+
     _list_to_work = _generated_list[:]
 
     print("\nRunning insertion sort...")
     algorithms.insertion_sort(_list_to_work)
+
+    if show_sorted_list in ("y", "Y"):
+        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+
+
     _list_to_work = _generated_list[:]
 
     print("\nRunning quick sort...")
     algorithms.quick_sort(_list_to_work)
+
+    if show_sorted_list in ("y", "Y"):
+        print(f"Resulting list: {get_compact_list(_list_to_work)}")
+
+
     _list_to_work = _generated_list[:]
 
     print("\nRunning merge sort...")
     algorithms.merge_sort(_list_to_work)
+
+    if show_sorted_list in ("y", "Y"):
+        print(f"Resulting list: {get_compact_list(_list_to_work)}")
 
 if __name__ == "__main__":
     main()

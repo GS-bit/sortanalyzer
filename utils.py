@@ -2,6 +2,9 @@
 Utility functions.
 """
 
+import os
+
+
 def input_option(msg: str, options: list[str]) -> str:
     """
     It prompts the user for input until a valid option is given.
@@ -60,3 +63,53 @@ def input_positive_integer(msg: str) -> int:
                 print("Invalid value!")
 
     return user_input
+
+def get_key(msg: str) -> str:
+    """
+    It waits for the user to press any key.
+
+    Arguments:
+        msg: a prompt message to the user.
+
+    Return:
+        the key pressed.
+    """
+
+    print(msg, end="", flush=True)
+
+    # For Windows systems:
+    if os.name == "nt":
+        import msvcrt
+
+        return msvcrt.getch().decode("utf-8")
+
+    # For Linux/macOS:
+    import sys
+    import termios
+    import tty
+
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+def get_compact_list(_list: list) -> str:
+    """
+    It displays the list in a compact format.
+
+    Arguments:
+        _list: the list.
+
+    Return:
+        a string with the compact representation of the list.
+    """
+
+    if len(_list) > 20:
+        return f"{_list[:10]} ... {_list[-10:]}"
+
+    return f"{_list}"
+    
