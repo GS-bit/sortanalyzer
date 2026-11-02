@@ -6,6 +6,8 @@ import random
 
 import algorithms
 
+from utils import input_option, input_positive_integer
+
 def main() -> None:
     """
     Main function.
@@ -15,15 +17,11 @@ def main() -> None:
 
     print("We are going to generate a list to you!\n")
 
-    list_type = input("(1) RANDOM LIST | (2) SORTED LIST | "
+    list_type = input_option("(1) RANDOM LIST | (2) SORTED LIST | "
         "(3) SORTED LIST (reverse order)\n"
-        "Select the type of the list: ")
+        "Select the type of the list: ", ["1", "2", "3"])
 
-    if list_type not in ("1", "2", "3"):
-        print("Invalid option!")
-        return
-
-    list_size = int(input("Type the list size: "))
+    list_size = input_positive_integer("Type the list size: ")
 
     _generated_list = []
 
