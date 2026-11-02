@@ -16,10 +16,16 @@ def main() -> None:
     print("=" * 26 + " SortAnalyzer " + "=" * 26)
 
     print("We are going to generate a list to you!\n")
+    print("This list will be sorted through some sorting algorithms, \n"
+          "and the time taken by each of them will be shown.")
+
+    print("=" * 26 + "=" * len(" SortAnalyzer ") + "=" * 26)
+
+    print("\n")
 
     list_type = input_option("(1) RANDOM LIST | (2) SORTED LIST | "
         "(3) SORTED LIST (reverse order)\n"
-        "Select the type of the list: ", ["1", "2", "3"])
+        "Select the type of the list to generate: ", ["1", "2", "3"])
 
     list_size = input_positive_integer("Type the list size: ")
 
