@@ -119,7 +119,7 @@ def main() -> None:
     if show_sorted_list:
         table.add_column("Resulting list", style="blue")
 
-        for name, time, sorted_list in zip(algorithms_names, 
+        for name, time, sorted_list in zip(algorithms_names,
                                            algorithms_times, algorithms_resulting_lists):
             table.add_row(name, time, sorted_list)
     else:
