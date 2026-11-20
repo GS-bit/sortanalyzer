@@ -4,160 +4,58 @@ We use pytest to run the tests.
 """
 
 import random
+from typing import Callable
+
+import pytest
 
 import algorithms
 
-def test_bubble_sort() -> None:
+
+@pytest.fixture
+def sample_lists() -> list[list[int]]:
     """
-    It tests the bubble sort algorithm, checking if the lists are sorted correctly.
-    """
+    It provides random, sorted and reverse-sorted sample lists for sorting tests.
 
-    list_size = 500
-
-    # Testing random lists:
-
-    _list = [random.randint(1,100*list_size) for i in range(list_size)]
-    algorithms.bubble_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists:
-
-    _list = list(range(1,list_size+1))
-    algorithms.bubble_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists in reverse order:
-
-    _list = list(range(list_size,0,-1))
-    algorithms.bubble_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-def test_selection_sort() -> None:
-    """
-    It tests the selection sort algorithm, checking if the lists are sorted correctly.
+    Return:
+        a list of the lists used for sorting tests.
     """
 
     list_size = 500
 
-    # Testing random lists:
+    lists = [
+        [random.randint(1, 100 * list_size) for _ in range(list_size)],  # Random list
+        list(range(1, list_size + 1)),  # Sorted list
+        list(range(list_size, 0, -1)),  # Sorted list (reverse order)
+    ]
 
-    _list = [random.randint(1,100*list_size) for i in range(list_size)]
-    algorithms.selection_sort(_list)
+    return lists
 
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
 
-    # Testing sorted lists:
-
-    _list = list(range(1,list_size+1))
-    algorithms.selection_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists in reverse order:
-
-    _list = list(range(list_size,0,-1))
-    algorithms.selection_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-def test_insertion_sort() -> None:
+@pytest.mark.parametrize(
+    "sorting_algorithm",
+    [
+        algorithms.bubble_sort,
+        algorithms.selection_sort,
+        algorithms.insertion_sort,
+        algorithms.quick_sort,
+        algorithms.merge_sort,
+    ],
+)
+def test_algorithms(
+    sorting_algorithm: Callable[[list[int]], str], sample_lists: list[list[int]]
+) -> None:
     """
-    It tests the insertion sort algorithm, checking if the lists are sorted correctly.
-    """
+    It tests the sorting algorithms, checking if the lists are sorted correctly.
 
-    list_size = 500
-
-    # Testing random lists:
-
-    _list = [random.randint(1,100*list_size) for i in range(list_size)]
-    algorithms.insertion_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists:
-
-    _list = list(range(1,list_size+1))
-    algorithms.insertion_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists in reverse order:
-
-    _list = list(range(list_size,0,-1))
-    algorithms.insertion_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-def test_quick_sort() -> None:
-    """
-    It tests the quick sort algorithm, checking if the lists are sorted correctly.
+    Arguments:
+        sorting_algorithm: sorting function.
+        sample_lists: the sample lists.
     """
 
-    list_size = 500
+    for original_list in sample_lists:
+        expected = sorted(original_list)
 
-    # Testing random lists:
+        candidate = original_list[:]
+        sorting_algorithm(candidate)
 
-    _list = [random.randint(1,100*list_size) for i in range(list_size)]
-    algorithms.quick_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists:
-
-    _list = list(range(1,list_size+1))
-    algorithms.quick_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists in reverse order:
-
-    _list = list(range(list_size,0,-1))
-    algorithms.quick_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-def test_merge_sort() -> None:
-    """
-    It tests the merge sort algorithm, checking if the lists are sorted correctly.
-    """
-
-    list_size = 500
-
-    # Testing random lists:
-
-    _list = [random.randint(1,100*list_size) for i in range(list_size)]
-    algorithms.merge_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists:
-
-    _list = list(range(1,list_size+1))
-    algorithms.merge_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
-
-    # Testing sorted lists in reverse order:
-
-    _list = list(range(list_size,0,-1))
-    algorithms.merge_sort(_list)
-
-    for i in range(len(_list)-1):
-        assert _list[i+1] >= _list[i]
+        assert candidate == expected
