@@ -29,10 +29,16 @@ Then go to sortanalyzer folder:
 
 ```cd sortanalyzer/```
 
-and run it with:
+and run the following command:
 
-```python3 main.py```
+```pipx install .```
 
-You will need these libraries to run the program. You can download them using PIP package manager:
-- rich
-- questionary
+This will start the installation process. Make sure you have pipx installed on your system. Refer to your operating system's documentation for instructions on how to install pipx.
+
+So, you can access the program by running:
+
+```sortanalyzer```
+
+If you desire to uninstall sortanalyzer, run this command:
+
+```pipx uninstall sortanalyzer```

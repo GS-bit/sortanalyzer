@@ -8,8 +8,7 @@ from typing import Callable
 
 import pytest
 
-import algorithms
-
+from sortanalyzer import algorithms
 
 @pytest.fixture
 def sample_lists() -> list[list[int]]:

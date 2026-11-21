@@ -13,7 +13,7 @@ from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.table import Table
 import questionary
 
-import algorithms
+from sortanalyzer import algorithms
 
 def main() -> None:
     """
@@ -127,6 +127,3 @@ def main() -> None:
             table.add_row(name, time)
 
     console.print(table)
-
-if __name__ == "__main__":
-    main()
