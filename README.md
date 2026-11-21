@@ -9,6 +9,7 @@ The sorting algorithms available in this software are the following:
 - Insertion sort
 - Quick sort
 - Merge sort
+- Heap sort
 
 After running SortAnalyser, the program will create a random list of numbers to sort, testing all the algorithms. The user is given the possibility to set the size of the list, as well as if he/she wants to sort a random list or an already sorted (reversed or not) list.
 
@@ -16,7 +17,7 @@ After running SortAnalyser, the program will create a random list of numbers to 
 
 This is a screenshot of the program, used as example of usage:
 
-<img width="1904" height="586" alt="Captura_de_tela_20261120_122459" src="https://github.com/user-attachments/assets/8ac2d56f-31f1-45a2-bdcb-d859acbbb59a" />
+<img width="1890" height="897" alt="Captura_de_tela_20261121_170144" src="https://github.com/user-attachments/assets/f987f238-ab42-4d76-a707-f6ec767a9943" />
 
 ## ⬇️ How to install SortAnalyzer:
 

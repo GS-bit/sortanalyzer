@@ -39,6 +39,7 @@ def sample_lists() -> list[list[int]]:
         algorithms.insertion_sort,
         algorithms.quick_sort,
         algorithms.merge_sort,
+        algorithms.heap_sort
     ],
 )
 def test_algorithms(

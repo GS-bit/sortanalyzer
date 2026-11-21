@@ -77,10 +77,10 @@ def main() -> None:
     # Setting analysis:
 
     algorithms_names = ["Bubble sort", "Selection sort", "Insertion sort", "Quick sort",
-                       "Merge sort"]
+                       "Merge sort", "Heap sort"]
     algorithms_funcs = [algorithms.bubble_sort, algorithms.selection_sort,
                         algorithms.insertion_sort, algorithms.quick_sort,
-                        algorithms.merge_sort]
+                        algorithms.merge_sort, algorithms.heap_sort]
     algorithms_times = []
     algorithms_resulting_lists = []  # Using string compact format,
                                      # so it does not occupy too much memory.

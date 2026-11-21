@@ -21,17 +21,18 @@ def clock(func: Callable[..., Any]) -> Callable[..., None]:
 
         end_time = time.perf_counter()
 
-        total_time = 1000*(end_time - start_time)  # Time in milliseconds.
+        total_time = 1000 * (end_time - start_time)  # Time in milliseconds.
 
         if total_time < 1000:
             return f"{(total_time):.2f}ms"
         if total_time < 60000:
             return f"{(total_time/1000):.2f}s"
-        if total_time < 3.6e+6:
+        if total_time < 3.6e6:
             return f"{(total_time/60000):.2f}min"
         return f"{(total_time/3.6e+6):.2f}h"
 
     return wrapper
+
 
 @clock
 def bubble_sort(_list: list[int]) -> str:
@@ -49,15 +50,16 @@ def bubble_sort(_list: list[int]) -> str:
 
     has_change = False
 
-    for i in range(list_size-1):
-        for j in range(list_size-1-i):
-            if _list[j+1] < _list[j]:
-                _list[j], _list[j+1] = _list[j+1], _list[j]
+    for i in range(list_size - 1):
+        for j in range(list_size - 1 - i):
+            if _list[j + 1] < _list[j]:
+                _list[j], _list[j + 1] = _list[j + 1], _list[j]
 
                 has_change = True
 
         if not has_change:
             return
+
 
 @clock
 def selection_sort(_list: list[int]) -> str:
@@ -73,16 +75,17 @@ def selection_sort(_list: list[int]) -> str:
 
     list_size = len(_list)
 
-    for i in range(list_size-1):
+    for i in range(list_size - 1):
         minor = _list[i]
         minor_pos = i
 
-        for j in range(i+1, list_size):
+        for j in range(i + 1, list_size):
             if _list[j] < minor:
                 minor = _list[j]
                 minor_pos = j
 
         _list[i], _list[minor_pos] = _list[minor_pos], _list[i]
+
 
 @clock
 def insertion_sort(_list: list[int]) -> str:
@@ -102,10 +105,11 @@ def insertion_sort(_list: list[int]) -> str:
         j = i
         cur_number = _list[j]
 
-        while j > 0 and _list[j-1] > cur_number:
-            _list[j] = _list[j-1]
-            j-=1
+        while j > 0 and _list[j - 1] > cur_number:
+            _list[j] = _list[j - 1]
+            j -= 1
         _list[j] = cur_number
+
 
 @clock
 def quick_sort(_list: list[int]) -> str:
@@ -135,7 +139,7 @@ def quick_sort(_list: list[int]) -> str:
         if len(_list) <= 1:
             return _list
 
-        pivot_id = random.randint(0, len(_list)-1)
+        pivot_id = random.randint(0, len(_list) - 1)
         pivot = _list[pivot_id]
 
         lesser_pivot = []
@@ -155,6 +159,7 @@ def quick_sort(_list: list[int]) -> str:
         return new_list
 
     _list[:] = _quick_sort(_list)
+
 
 @clock
 def merge_sort(_list: list[int]) -> str:
@@ -212,8 +217,8 @@ def merge_sort(_list: list[int]) -> str:
         if len(_list) <= 1:
             return _list
 
-        _list_half1 = _list[:len(_list)//2]
-        _list_half2 = _list[len(_list)//2:]
+        _list_half1 = _list[: len(_list) // 2]
+        _list_half2 = _list[len(_list) // 2 :]
 
         _list_sorted_half1 = _merge_sort(_list_half1)
         _list_sorted_half2 = _merge_sort(_list_half2)
@@ -221,3 +226,109 @@ def merge_sort(_list: list[int]) -> str:
         return merge(_list_sorted_half1, _list_sorted_half2)
 
     _list[:] = _merge_sort(_list)
+
+
+@clock
+def heap_sort(_list: list[int]) -> str:
+    """
+    It runs heap sort on an existing list in-place.
+
+    Arguments:
+        _list: the list.
+
+    Return:
+        the time taken to run heap sort.
+    """
+
+    class Heap:
+        """
+        It implements a heap data structure.
+        """
+
+        def __init__(self, _list: list[int]) -> None:
+            """
+            It initializes the heap.
+
+            Arguments:
+                _list: the list to turn into a heap.
+            """
+
+            self._heap = _list
+
+            self.end = len(_list)  # The effective end of the heap
+
+            self._heapify()
+
+        def _heapify(self) -> None:
+            """
+            It turns the list into a heap.
+            """
+
+            for elem in range(self.end // 2 - 1, -1, -1):
+                self.siftdown(elem)
+
+        def siftup(self, index: int) -> None:
+            """
+            It sifts up an element in the heap.
+
+            Arguments:
+                index: the index of the element to sift up.
+            """
+
+            parent_index = (index - 1) // 2
+
+            while parent_index >= 0 and self._heap[index] > self._heap[parent_index]:
+                self._heap[index], self._heap[parent_index] = (
+                    self._heap[parent_index],
+                    self._heap[index],
+                )
+
+                index = parent_index
+                parent_index = (index - 1) // 2
+
+        def siftdown(self, index: int) -> None:
+            """
+            It sifts down an element in the heap.
+
+            Arguments:
+                index: the index of the element to sift down.
+            """
+
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+
+            largest_child_index = (
+                right_child_index
+                if right_child_index < self.end and left_child_index < self.end
+                and self._heap[right_child_index] > self._heap[left_child_index]
+                else left_child_index
+            )
+
+            while (
+                largest_child_index < self.end
+                and self._heap[index] < self._heap[largest_child_index]
+            ):
+                self._heap[index], self._heap[largest_child_index] = (
+                    self._heap[largest_child_index],
+                    self._heap[index],
+                )
+
+                index = largest_child_index
+
+                left_child_index = 2 * index + 1
+                right_child_index = 2 * index + 2
+
+                largest_child_index = (
+                    right_child_index
+                    if right_child_index < self.end and left_child_index < self.end
+                    and self._heap[right_child_index] > self._heap[left_child_index]
+                    else left_child_index
+                )
+
+    heap = Heap(_list)
+
+    for end in range(heap.end-1, 0, -1):
+        _list[0], _list[end] = _list[end], _list[0]
+
+        heap.end = end
+        heap.siftdown(0)
